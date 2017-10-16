@@ -12,8 +12,6 @@ class Planet(models.Model):
     pass
 
 
-
-
 class People(models.Model):
     # Fill in
 
@@ -45,6 +43,7 @@ class Transport(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Starship(Transport):
     """ A starship is a transport with a hypderdrive """
