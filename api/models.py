@@ -16,6 +16,9 @@ class Planet(models.Model):
 
 class People(models.Model):
     # Fill in
+
+    # https://docs.djangoproject.com/en/1.11/ref/models/fields/#django.db.models.ForeignKey
+    # for homeworld
     pass
 
 
