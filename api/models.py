@@ -6,40 +6,78 @@ from django.db import models
 # models.ForeignKey
 # https://docs.djangoproject.com/en/1.11/ref/models/fields/#field-types
 
-
-class Planet(models.Model):
-    # Fill in
-    pass
-
-
-class People(models.Model):
-    # Fill in
-
-    # https://docs.djangoproject.com/en/1.11/ref/models/fields/#django.db.models.ForeignKey
-    # for homeworld
-    pass
+class TimeStampedModel(models.Model):
+    edited = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)    
+   
+    class Meta:
+        abstract=True
 
 
-class Species(models.Model):
-    # Fill in
-    pass
 
+class Planet(TimeStampedModel):
+    climate = models.CharField(max_length=80)
+    surface_water = models.CharField(max_length=80)
+    name = models.CharField(max_length=80)
+    diameter = models.CharField(max_length=80)
+    rotation_period = models.CharField(max_length=80)
+    terrain = models.CharField(max_length=80)
+    gravity = models.CharField(max_length=80)
+    orbital_period = models.CharField(max_length=80)
+    population = models.CharField(max_length=80)
+    def __str__(self):
+        return self.name
 
-class Transport(models.Model):
+class People(TimeStampedModel):
+
+    name = models.CharField(max_length=80)
+    gender = models.CharField(max_length=80)
+    skin_color = models.CharField(max_length=80)
+    hair_color = models.CharField(max_length=80)
+    height = models.CharField(max_length=80)
+    eye_color = models.CharField(max_length=80)
+    mass = models.CharField(max_length=80)
+    homeworld = models.IntegerField()
+    birth_year = models.CharField(max_length=80)
+    def __str__(self):
+        return self.name
+
+class Species(TimeStampedModel):
+    
+    classification = models.CharField(max_length=80)
+    people = models.ManyToManyField(
+        People,
+        related_name="species",
+        blank=True
+    )
+    name = models.CharField(max_length=80)
+    designation = models.CharField(max_length=80)
+    eye_colors = models.CharField(max_length=80)
+    skin_colors = models.CharField(max_length=80)
+    language = models.CharField(max_length=80)
+    hair_colors = models.CharField(max_length=80)
+    homeworld = models.IntegerField(null=True)
+    average_lifespan = models.CharField(max_length=80)
+    average_height = models.CharField(max_length=80) 
+
+    class Meta:
+        verbose_name_plural = "species"
+
+    def __str__(self):
+        return self.name
+
+class Transport(TimeStampedModel):
 
     name = models.CharField(max_length=40)
-    model = models.CharField(max_length=40)
+    model = models.CharField(max_length=80)
+    crew = models.CharField(max_length=80)
     manufacturer = models.CharField(max_length=80)
-    cost_in_credits = models.CharField(max_length=40)
+    cost_in_credits = models.IntegerField()
     length = models.CharField(max_length=40)
     max_atmosphering_speed = models.CharField(max_length=40)
-    crew = models.CharField(max_length=40)
     passengers = models.CharField(max_length=40)
     cargo_capacity = models.CharField(max_length=40)
     consumables = models.CharField(max_length=40)
-
-    created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -67,16 +105,13 @@ class Vehicle(Transport):
     vehicle_class = models.CharField(max_length=40)
 
     pilots = models.ManyToManyField(
-        People,
+        'People',
         related_name="vehicles",
         blank=True
     )
 
 
-class Film(models.Model):
-
-    created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
+class Film(TimeStampedModel):
 
     title = models.CharField(max_length=100)
     episode_id = models.IntegerField()
